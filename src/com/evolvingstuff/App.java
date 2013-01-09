@@ -12,7 +12,7 @@ public class App {
 		
 		Random r = new Random(54324);
 		
-		boolean doLoad = false;
+		boolean doLoad = true;
 		boolean doSave = true;
 		
 		MNIST task = new MNIST();
@@ -25,7 +25,7 @@ public class App {
 		double init_weight_range = 0.2;
 		double learning_rate = 0.3;
 		
-		String path = "flatnn/";
+		String path = "data/";
 		
 		FlatJumpNetwork agent = new FlatJumpNetwork(r, task.GetObservationDimension(), task.GetActionDimension(), hidden_per_layer, neuron, init_weight_range, learning_rate);
 		

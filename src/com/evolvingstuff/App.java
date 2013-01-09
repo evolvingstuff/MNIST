@@ -12,7 +12,7 @@ public class App {
 		
 		Random r = new Random(54324);
 		
-		boolean doLoad = true;
+		boolean doLoad = false;
 		boolean doSave = true;
 		
 		MNIST task = new MNIST();

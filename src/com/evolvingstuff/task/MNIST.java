@@ -137,58 +137,49 @@ public class MNIST implements IInteractiveEvaluatorSupervised {
 	public double EvaluateFitnessSupervised(IAgentSupervised agent) throws Exception {
 		byte[] bimg = new byte[task_observation_dimension];
 		byte[] blbl = new byte[1];
+		
+		String path_images, path_labels, display;
+		int total_examples;
+		boolean apply_training;
+		
+		if (validation_mode == false) { //TRAIN
+			path_images = train_images;
+			path_labels = train_labels;
+			total_examples = total_train;
+			apply_training = true;
+			display = "TRAIN";
+		}
+		else { //TEST
+			path_images = test_images;
+			path_labels = test_labels;
+			total_examples = total_test;
+			apply_training = false;
+			display = "TEST";
+		}
+		
 		double tot_fit = 0;
 		int total_errors = 0;
-		if (validation_mode == false) {
-			FileInputStream images = new FileInputStream(train_images);
-			FileInputStream labels = new FileInputStream(train_labels);
-			images.skip(16);
-			labels.skip(8);
-			double tot_evaluated = 0;
-			for (int n = 0; n < total_train; n++) {
-				if (n % 1000 == 999) {
-					System.out.print(".");
-				}
-				images.read(bimg);
-				labels.read(blbl);
-				double fit = EvaluateSampleSupervised(bimg, blbl, agent, true);
-				if (fit < 1) {
-					total_errors++;
-				}
-				tot_fit += fit;
-				tot_evaluated += 1;
-
+		FileInputStream images = new FileInputStream(path_images);
+		FileInputStream labels = new FileInputStream(path_labels);
+		images.skip(16);
+		labels.skip(8);
+		for (int n = 0; n < total_examples; n++) {
+			if (n % 1000 == 999) {
+				System.out.print(".");
 			}
-			images.close();
-			labels.close();
-			tot_fit /= tot_evaluated;
-			System.out.println("\nTRAIN ERRORS: " + total_errors + " (of "+total_train+")");
-			return tot_fit;
-		}
-		else { //validation == true
-			
-			FileInputStream images = new FileInputStream(test_images);
-			FileInputStream labels = new FileInputStream(test_labels);
-			images.skip(16);
-			labels.skip(8);
-			for (int n = 0; n < total_test; n++) {
-				if (n % 1000 == 999) {
-					System.out.print(".");
-				}
-				images.read(bimg);
-				labels.read(blbl);
-				double fit = EvaluateSampleSupervised(bimg, blbl, agent, false);
-				if (fit < 1) {
-					total_errors++;
-				}
-				tot_fit += fit;
+			images.read(bimg);
+			labels.read(blbl);
+			double fit = EvaluateSampleSupervised(bimg, blbl, agent, apply_training);
+			if (fit < 1) {
+				total_errors++;
 			}
-			images.close();
-			labels.close();
-			tot_fit /= total_test;
-			System.out.println("\nTEST ERRORS: " + total_errors + " (of "+total_test+")");
-			return tot_fit;
+			tot_fit += fit;
 		}
+		images.close();
+		labels.close();
+		tot_fit /= total_examples;
+		System.out.println("\n"+display+" ERRORS: " + total_errors + " (of "+total_examples+")");
+		return tot_fit;
 	}
 }
 

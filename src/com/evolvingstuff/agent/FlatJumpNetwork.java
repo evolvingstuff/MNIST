@@ -3,14 +3,7 @@ package com.evolvingstuff.agent;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-
-import com.evolvingstuff.task.MNIST;
 import com.evolvingstuff.util.util;
-
-/*
- * 2012-12-12
- * Why does this not appear to work?????????
-*/
 
 public class FlatJumpNetwork implements IAgentSupervised {
 	

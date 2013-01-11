@@ -1,6 +1,6 @@
-package com.evolvingstuff.agent;
+package com.evolvingstuff.neuralnet;
 
-public interface IAgentSupervised {
+public interface ISupervised {
 	double[] Next(double[] input, double[] target_output) throws Exception;
 	double[] Next(double[] input) throws Exception;
 }

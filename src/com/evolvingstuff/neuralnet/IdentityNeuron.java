@@ -1,4 +1,4 @@
-package com.evolvingstuff.agent;
+package com.evolvingstuff.neuralnet;
 
 public class IdentityNeuron extends Neuron
 {

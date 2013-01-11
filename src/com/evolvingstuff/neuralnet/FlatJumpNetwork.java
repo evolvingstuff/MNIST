@@ -1,11 +1,11 @@
-package com.evolvingstuff.agent;
+package com.evolvingstuff.neuralnet;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import com.evolvingstuff.util.util;
 
-public class FlatJumpNetwork implements IAgentSupervised {
+public class FlatJumpNetwork implements ISupervised {
 	
 	private List<Layer> layers = new ArrayList<Layer>();
 	private Layer readout;

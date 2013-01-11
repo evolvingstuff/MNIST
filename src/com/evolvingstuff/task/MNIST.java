@@ -2,8 +2,8 @@ package com.evolvingstuff.task;
 
 import java.io.*;
 
-import com.evolvingstuff.agent.IAgentSupervised;
 import com.evolvingstuff.evaluator.*;
+import com.evolvingstuff.neuralnet.ISupervised;
 
 public class MNIST implements IInteractiveEvaluatorSupervised {
 	/*
@@ -76,7 +76,12 @@ public class MNIST implements IInteractiveEvaluatorSupervised {
 	private final String train_labels = "train-labels-idx1-ubyte";
 	private final String test_images = "t10k-images-idx3-ubyte";
 	private final String test_labels = "t10k-labels-idx1-ubyte";
+	private String path;
 	private boolean validation_mode = false;
+	
+	public MNIST(String path) {
+		this.path = path;
+	}
 	
 	private double InnerEval(double[] agent_output, double[] input_to_agent, int target_loc) throws Exception {
 		double high = Double.NEGATIVE_INFINITY;
@@ -95,7 +100,7 @@ public class MNIST implements IInteractiveEvaluatorSupervised {
 		}
 	}
 	
-	private double EvaluateSampleSupervised(byte[] bimg, byte[] blbl, IAgentSupervised agent, boolean give_target) throws Exception {
+	private double EvaluateSampleSupervised(byte[] bimg, byte[] blbl, ISupervised agent, boolean give_target) throws Exception {
 		double[] input_to_agent = new double[task_observation_dimension];
 		int loc = 0;
 		int k = 0;
@@ -134,7 +139,7 @@ public class MNIST implements IInteractiveEvaluatorSupervised {
 		validation_mode = validation;
 	}
 
-	public double EvaluateFitnessSupervised(IAgentSupervised agent) throws Exception {
+	public double EvaluateFitnessSupervised(ISupervised agent) throws Exception {
 		byte[] bimg = new byte[task_observation_dimension];
 		byte[] blbl = new byte[1];
 		
@@ -143,15 +148,15 @@ public class MNIST implements IInteractiveEvaluatorSupervised {
 		boolean apply_training;
 		
 		if (validation_mode == false) { //TRAIN
-			path_images = train_images;
-			path_labels = train_labels;
+			path_images = path + train_images;
+			path_labels = path + train_labels;
 			total_examples = total_train;
 			apply_training = true;
 			display = "TRAIN";
 		}
 		else { //TEST
-			path_images = test_images;
-			path_labels = test_labels;
+			path_images = path + test_images;
+			path_labels = path + test_labels;
 			total_examples = total_test;
 			apply_training = false;
 			display = "TEST";
